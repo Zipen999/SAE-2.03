@@ -1,5 +1,5 @@
 ## TP Squid-Proxy
-Avant d'attaquer le TP assurez-vous de bien avoir installer et configuerer votre proxy grâce aux scripts `sae203-install.sh`
+Avant d'attaquer le TP assurez-vous de bien avoir installer et configurer votre proxy grâce aux scripts `sae203-install.sh`
 et `sae203-services .sh`.
 
 ### Bloquer l'acces a un site web
