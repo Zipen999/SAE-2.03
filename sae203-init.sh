@@ -1,25 +1,12 @@
 #!/bin/sh
 
-#takes one argument,$1 should be the machines name
-if [ -z "$1" ] ; then #Checks if the first argument is empty
-	echo "Veuillez saisir le nom de machine en argument" >&2
-	exit 2
-fi
-
-if [ ! `vdn-ssh root@$1` ]; then #Checks if the first argument isn't the same as our virtual machines name
-    echo "Mauvais nom de machine !" >&2
-    exit 2
-fi
-
-HOSTNAME=$1
-
 baseConfig() {
 	echo "baseConfig $@..."
  
 	# Gives the current machine its correct name and
 	# matches the IP <-> nom  in (/etc/hosts)
 	vdn-ssh root@$1 '
-		# fixe le nom de la machine (/etc/hostname)
+		# Gives the current machine its correct name
 		echo '$1' > /etc/hostname
 		hostname -F /etc/hostname
  
@@ -102,7 +89,12 @@ case $yn in
 esac
 
 done
-baseConfig $HOSTNAME
+
+# main 
+HOSTNAME=debian-1 #This variable needs to be changed depending on the name you want to give your machine.
+IP=10.0.2.15 #This should be your machines IP, make sure to change it and also make sure its not already given to another machine !
+
+baseConfig $HOSTNAME $IP
 testBaseConfig $HOSTNAME
 password $HOSTNAME
 ssh $HOSTNAME

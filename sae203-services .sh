@@ -55,6 +55,10 @@ testSshfs() {
 testNfs() {
 	echo "testNfs $@..."
 	vdn-ssh root@$1 '
+					if [ ! -f /overlays/ro/usr/share/doc/a.c ] ; then 
+						mkdir -p /overlays/ro/usr/share/doc/
+						touch /overlays/ro/usr/share/doc/a.c
+					fi
 					echo "/overlays/ro/usr/share/doc '$1'(ro,sync,fsid=1,no_subtree_check)" > /etc/exports
 					/etc/init.d/nfs-kernel-server restart
 					if [ ! -d nfsTest ] ; then 
@@ -114,8 +118,13 @@ testApache2() {
 
 testSquid() {
 	echo "testSquid $@..."
-	vdn-ssh root@$1 ' 
+	vdn-ssh root@$1 '
+
+	#Deleting the current squid config files and creating new ones
+
+	rm -rf /etc/squid
     touch /etc/squid/passwd
+    touch /etc/squid/blacklist.acl
 
     # Setting up the config file with the correct options
 
@@ -187,17 +196,13 @@ request_header_access User-Agent allow all
 request_header_access Cookie allow all
 request_header_access All deny all" > /etc/squid/squid.conf
 
-    /usr/bin/touch /etc/squid/blacklist.acl
 
     #checks if our default port is set correctly to our proxy
 
-    if [ -f /sbin/iptables ]; then
-        /sbin/iptables -I INPUT -p tcp --dport 3128 -j ACCEPT
-        /sbin/iptables-save
-    fi
-
-    service squid restart
+    /sbin/iptables -I INPUT -p tcp --dport 3128 -j ACCEPT
+ 	/sbin/iptables-save
     systemctl enable squid
+    systemctl restart squid
     if [ $? = 0 ] ; then
 		echo "======================================"
 		echo "SERVICE SQUID-PROXY FONCTIONNEL"
@@ -233,7 +238,7 @@ request_header_access All deny all" > /etc/squid/squid.conf
 	    /usr/bin/htpasswd -c /etc/squid/passwd $proxy_username
 	fi
 
-	service squid restart
+	systemctl squid restart
 	if [ $? = 0 ] ; then
 		echo "======================================"
 		echo "SERVICE SQUID-PROXY FONCTIONNEL"
