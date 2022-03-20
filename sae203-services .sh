@@ -246,6 +246,11 @@ request_header_access All deny all" > /etc/squid/squid.conf
 	fi
 	'
 }
+testPiHole() {
+	vdn-ssh root@$1 ' 
+	PiHoleIP= `cat /etc/pihole/setupVars.conf | grep IPV4 | cut -d "=" -f2 | cut -d "/" -f1`
+	echo "nameserver $PiHoleIP" > /etc/resolv.conf' # Replaces the current DNS server with the PiHole IPv4 Address in order to forward requests to PiHole.
+}
 
 # main
 
@@ -255,3 +260,4 @@ testNfs $HOSTNAME
 testFtp $HOSTNAME
 testApache2 $HOSTNAME
 testSquid $HOSTNAME
+testPiHole $HOSTNAME
