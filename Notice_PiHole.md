@@ -1,31 +1,14 @@
-# NOTICE D'UTILISATION SQUID
-Si vous avez réussi à exécuter le script `sae203-install.sh` et `sae203-services.sh` sans erreurs, votre serveur proxy doit être configuré et prêt pour l'utilisation.
+# NOTICE D'UTILISATION PIHOLE
+Si vous avez réussi à exécuter le script `sae203-install.sh` ,  `sae203-services.sh` sans erreurs, votre PiHole doit être prêt pour l'utilisation.
 
-_Vous devez être sur root pour pouvoir correctement configurer votre proxy !_
-## Utilisation de Squid 1: Restreindre l’accès à des sites Web spécifiques 
-C’est ainsi que vous pouvez empêcher des personnes de naviguer sur certains sites Web lorsqu’ils sont connectés à votre réseau à l’aide de votre serveur proxy.
+_La configuration s'effectue à partir de vos choix lors de l'installation mais je vais vous montrer comment le configurer pour une utilisation optimale_
+### Installation PiHole:
 
-Créez un fichier appelé `restricted_sites` et répertoriez tous les sites dont vous souhaitez restreindre l’accès.
-``` 
-$ nano /etc/squid/restricted_sites  
-www.youtube.com  
-www.facebook.com  
-```
-lancer la commande si dessous pour terminer la configuration de votre proxy.
-```
-echo "acl RestrictedSites  dstdomain "/etc/squid/restricted_sites"
-http_access deny RestrictedSites" >> /etc/squid/squid.conf
-systemctl squid restart
-```
-## Utilisation de Squid 2: Autoriser l’accès aux sites Web uniquement pendant une période spécifique 
-La configuration squid.conf illustrée ci-dessous ne permettra l’accès à Internet pour les utilisateurs qu’entre 9h00 et 18h00 en semaine à vous de le modifier pour configurer vos propres périodes.
+Répondez Ok aux premieres questions...
+![1](https://user-images.githubusercontent.com/78689752/159179310-c9025c1d-da4f-4f00-96d2-ef62286afe2a.png)
 
+Choisissez votre serveur DNS (je vous recommande d'utiliser OpenDNS ou google)
+![2](https://user-images.githubusercontent.com/78689752/159179502-e4b7765f-d1f1-4bef-942f-ee9d0c7378df.png)
 
-les jours sont en anglais: _M = Monday(Lundi), T = Tuesday(Mardi), W = Wednesday(Mercredi), H = Thursday(Jeudi), F = Friday(Vendredi), A = Saturday(Samedi), S = Sunday(Dimanche), D = jours ouvrés._
-
-```
-echo "acl official_hours time M T W H F 09:00-18:00
-http_access deny all
-http_access allow official_hours" >> /etc/squid/squid.conf
-systemctl squid restart
-``` 
+Continuez le processus d’installation avec les options souhaitées jusqu'a atteindre la derniere page ci dessous ou vous retrouvrez les informations de votre PiHole, gardez les précieusement ils vous seront très utiles pour personnalisez votre PiHole!
+![4](https://user-images.githubusercontent.com/78689752/159179730-9a2d47b2-4bcf-4029-9193-dc0543aaadf4.png)
